@@ -8,12 +8,24 @@
 
         <style type="text/css">
             body {
+                height: 100vh;
+                max-height: 768px;
                 margin: 0;
                 overflow: hidden;
+            }
+
+            nav {
+                position: absolute;
             }
         </style>
     </head>
     <body>
+        <nav>
+            <button data-matter-type="solid">Solid</button>
+            <button data-matter-type="liquid">Liquid</button>
+            <button data-matter-type="gas">Gas</button>
+        </nav>
+
         <canvas></canvas>
         <script src="canvas_particles.js"></script>
     </body>

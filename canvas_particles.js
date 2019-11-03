@@ -1,22 +1,22 @@
 var canvas = document.querySelector('canvas');
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
 var context = canvas.getContext('2d');
 
-function Circle(x, y, dx, dy, radius, gradient) {
+canvas.width = window.innerWidth;
+canvas.height = document.body.clientHeight;
+
+function Circle(x, y, dx, dy, radius) {
     this.x = x;
     this.y = y;
     this.dx = dx;
     this.dy = dy;
+    this.stroke = 4;
     this.radius = radius;
 
     this.draw = function() {
         context.beginPath();
         context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
         context.strokeStyle = '#43aa8b';
-        context.lineWidth = 4;
+        context.lineWidth = this.stroke;
         context.stroke();
         context.fillStyle = '#254441';
         context.fill();
@@ -42,37 +42,42 @@ var x, y, dx, dy, radius;
 var circleArray = [];
 
 // solid
-for (let i = 0; i < 2000; i++) {
-    radius = Math.random() * 20;
-    x = Math.random() * (canvas.width - radius * 2) + radius;
-    y = Math.random() * (canvas.height - radius * 2) + radius;
-    dx = (Math.random() - 0.5) * 0.2;
-    dy = (Math.random() - 0.5) * 0.2;
+function loadSolid() {
+    for (let i = 0; i < (canvas.width + canvas.height) * 4; i++) {
+        radius = Math.random() * 20;
+        x = Math.random() * (canvas.width - radius * 2) + radius;
+        y = Math.random() * (canvas.height - radius * 2) + radius;
+        dx = (Math.random() - 0.5) * 0.4;
+        dy = (Math.random() - 0.5) * 0.4;
 
-    circleArray.push(new Circle(x, y, dx, dy, radius));
+        circleArray.push(new Circle(x, y, dx, dy, radius));
+    }
 }
 
 // liquid
-// for (let i = 0; i < 1000; i++) {
-//     radius = Math.random() * 20;
-//     x = Math.random() * (canvas.width - radius * 2) + radius;
-//     y = Math.random() * (canvas.height - radius * 2) + radius;
-//     dx = (Math.random() - 0.5) * 5;
-//     dy = (Math.random() - 0.5) * 5;
+function loadLiquid() {
+    for (let i = 0; i < canvas.width + canvas.height; i++) {
+        radius = Math.random() * 20;
+        x = Math.random() * (canvas.width - radius * 2) + radius;
+        y = Math.random() * (canvas.height - radius * 2) + radius;
+        dx = (Math.random() - 0.5) * 5;
+        dy = (Math.random() - 0.5) * 5;
 
-//     circleArray.push(new Circle(x, y, dx, dy, radius));
-// }
+        circleArray.push(new Circle(x, y, dx, dy, radius));
+    }
+}
 
 // gas
-// for (let i = 0; i < 100; i++) {
-//     radius = Math.random() * 20;
-//     x = Math.random() * (canvas.width - radius * 2) + radius;
-//     y = Math.random() * (canvas.height - radius * 2) + radius;
-//     dx = (Math.random() - 0.5) * (20 - 10) + 10;
-//     dy = (Math.random() - 0.5) * (20 - 10) + 10;
-
-//     circleArray.push(new Circle(x, y, dx, dy, radius));
-// }
+function loadGas() {
+    for (let i = 0; i < 100; i++) {
+        radius = Math.random() * 20;
+        x = Math.random() * (canvas.width - radius * 2) + radius;
+        y = Math.random() * (canvas.height - radius * 2) + radius;
+        dx = (Math.random() - 0.5) * 30;
+        dy = (Math.random() - 0.5) * 30;
+        circleArray.push(new Circle(x, y, dx, dy, radius));
+    }
+}
 
 function animate() {
     requestAnimationFrame(animate);
@@ -84,3 +89,23 @@ function animate() {
 }
 
 animate();
+
+window.addEventListener('click', e => {
+    if (e.target.dataset.matterType) {
+        circleArray = [];
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        if (e.target.dataset.matterType === 'solid') {
+            loadSolid();
+        } else if (e.target.dataset.matterType === 'liquid') {
+            loadLiquid();
+        } else {
+            loadGas();
+        }
+    }
+});
+
+window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+});
