@@ -1,8 +1,10 @@
 var canvas = document.querySelector('canvas');
 var context = canvas.getContext('2d');
 
-canvas.width = window.innerWidth;
-canvas.height = document.body.clientHeight;
+function getCanvasSize() {
+    canvas.width = document.body.clientWidth;
+    canvas.height = document.body.clientHeight;
+}
 
 function Circle(x, y, dx, dy, radius) {
     this.x = x;
@@ -43,12 +45,12 @@ var circleArray = [];
 
 // solid
 function loadSolid() {
-    for (let i = 0; i < (canvas.width + canvas.height) * 4; i++) {
+    for (let i = 0; i < 5000; i++) {
         radius = Math.random() * 20;
         x = Math.random() * (canvas.width - radius * 2) + radius;
         y = Math.random() * (canvas.height - radius * 2) + radius;
-        dx = (Math.random() - 0.5) * 0.4;
-        dy = (Math.random() - 0.5) * 0.4;
+        dx = (Math.random() - 0.5) * 0.3;
+        dy = (Math.random() - 0.5) * 0.3;
 
         circleArray.push(new Circle(x, y, dx, dy, radius));
     }
@@ -56,7 +58,7 @@ function loadSolid() {
 
 // liquid
 function loadLiquid() {
-    for (let i = 0; i < canvas.width + canvas.height; i++) {
+    for (let i = 0; i < 1000; i++) {
         radius = Math.random() * 20;
         x = Math.random() * (canvas.width - radius * 2) + radius;
         y = Math.random() * (canvas.height - radius * 2) + radius;
@@ -88,6 +90,7 @@ function animate() {
     }
 }
 
+getCanvasSize();
 animate();
 
 window.addEventListener('click', e => {
@@ -106,6 +109,5 @@ window.addEventListener('click', e => {
 });
 
 window.addEventListener('resize', () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    getCanvasSize();
 });
